@@ -1,62 +1,72 @@
-# ResumeIQ: The Multi-Agent Resume Reviewer
+# ResumeIQ: Professional Multi-Agent Resume Optimization
 
-ResumeIQ is a professional-grade, AI-driven resume optimization suite. Built with **Streamlit**, **LangChain**, and **LangGraph**, it orchestrates a specialized workforce of four AI agents to transform raw resumes into high-performance, ATS-ready professional documents.
+ResumeIQ is an advanced AI-driven suite designed to bridge the gap between talented professionals and complex Applicant Tracking Systems (ATS). By orchestrating a sequential workforce of four specialized agents, ResumeIQ transforms raw, unoptimized resumes into high-impact professional documents.
 
-## 🧠 The Agent Workforce
+## 🌉 The Multi-Agent Pipeline
 
-ResumeIQ utilizes a sequential Language Graph (LangGraph) to pass state through four independent intelligence layers:
+The core of ResumeIQ is a **Stateful Language Graph** that maintains context as it passes your information through four distinct stages of intelligence:
 
-1.  **Parser Agent**: Deconstructs raw PDF extraction into structured professional entities (Skills, Education, Experience).
-2.  **ATS Evaluator (Mathematical)**: Performs a non-polite, rubric-based mathematical scoring (starting from base 40) to provide realistic ATS feedback.
-3.  **Improvement Coach**: Analyzes bullet points to suggest quantifiable impact (using metrics and action verbs).
-4.  **Rewrite Agent**: Crafts the final polished document, synthesizing feedback and keywords into a professional draft.
+```mermaid
+graph LR
+    User([PDF Upload]) --> Parser{{1. Parser Agent}}
+    Parser --> ATS{{2. ATS Evaluator}}
+    ATS --> Coach{{3. Improvement Coach}}
+    Coach --> Rewrite{{4. Rewrite Agent}}
+    Rewrite --> Result([Final Optimized Draft])
+    
+    style User fill:#f9f,stroke:#333,stroke-width:2px
+    style Result fill:#00ff00,stroke:#333,stroke-width:2px
+```
 
-## ✨ Key Features
+### 🧠 Agent Responsibilities
 
--   **Dynamic Agent Streaming**: Watch the agents report their progress step-by-step with real-time feedback.
--   **Zero-CSS Native UI**: Optimized for stability and professional aesthetics using native Streamlit layout primitives.
--   **Mathematical ATS Rubric**: No "polite" generic scores; get a hard, analytical calculation of your resume's strength.
--   **Instant Processing**: Zero-latency workflow—the moment you drop your PDF, the agent workflow initializes automatically.
--   **Privacy First**: No files are stored locally; all data lives in session state and is purged immediately after use.
+1.  **Parser Agent**: Strategically deconstructs the PDF into structured data (Skills, Education, Experience) ensuring no vital info is lost in transit.
+2.  **ATS Evaluator (Mathematical)**: Applies a cold, objective mathematical rubric (starting from base 40) to calculate your resume's "vulnerability score" based on keywords and metrics.
+3.  **Improvement Coach**: Identifies weak bullet points and coaches you on quantifying impact using specific industry action verbs.
+4.  **Rewrite Agent**: Synthesizes all criticisms and keywords into a final, polished draft that is ready for submission.
 
-## 🚀 Setup & Installation
+## 🔑 Bring Your Own Key (BYOK)
 
-### 1. Requirements
-Ensure you have Python 3.10+ installed.
+To ensure maximum security and privacy, **ResumeIQ does not store API keys.** 
+- When running locally or on the deployed version, you must provide your own **Groq API Key** (or compatible vendor key).
+- All processing happens in-memory and is purged immediately after your session ends.
+
+---
+
+## 💻 Local Setup & Development
+
+Follow these steps to get ResumeIQ running on your local machine:
+
+### 1. Environment Preparation
+Create and activate a virtual environment to keep your dependencies isolated:
+
+**Mac/Linux:**
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+```
+
+**Windows:**
+```bash
+python -m venv .venv
+.venv\Scripts\activate
+```
+
+### 2. Install Dependencies
 ```bash
 pip install -r requirements.txt
 ```
 
-### 2. Local Execution
-Run the application using Streamlit:
+### 3. Run the Application
+Start the Streamlit web server:
 ```bash
 streamlit run multi_agent_system.py
 ```
 
-## ☁️ Deployment Guide (Streamlit Cloud)
+### 🛑 How to stop & Clean up
 
-### 1. Prep for Git
-Before pushing, ensure your `.gitignore` includes:
-```text
-.env
-.venv/
-__pycache__/
-```
-
-### 2. Git Commands
-Initialize your repo and push to GitHub:
-```bash
-git init
-git add .
-git commit -m "Initial release of ResumeIQ"
-git branch -M main
-git remote add origin <your-github-repo-url>
-git push -u origin main
-```
-
-### 3. Streamlit Cloud Deploy
-1. Sign in to [share.streamlit.io](https://share.streamlit.io/).
-2. Click **"New app"**.
-3. Select this repository and the `main` branch.
-4. Set the main file path to `multi_agent_system.py`.
-5. Click **Deploy!**
+- **Stop the App**: Press `Ctrl + C` in your terminal to shut down the Streamlit server.
+- **Deactivate Environment**: Once you are done, simply run:
+  ```bash
+  deactivate
+  ```
