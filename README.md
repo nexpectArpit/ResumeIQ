@@ -70,3 +70,16 @@ streamlit run multi_agent_system.py
   ```bash
   deactivate
   ```
+
+---
+
+## 🎓 Key Learnings
+
+Building ResumeIQ provided valuable insights into the intersection of Generative AI and production-level web engineering:
+
+1.  **Multi-Agent Orchestration**: I learned how to use **LangGraph** to manage complex state transitions between specialized AI agents, ensuring that analytical findings from one agent are reliably passed to the creative rewrite phase.
+2.  **Streaming & User Experience**: Implementing `.stream()` instead of `.invoke()` taught me how to bridge the gap between long-running AI tasks and responsive UIs, providing users with immediate visual feedback during complex background calculations.
+3.  **Prompt Engineering & Rubrics**: I discovered that LLM "politeness" can be a blocker for analytical tasks. Moving from generic scoring to a **mathematical point-based rubric** was essential for generating authentic, variarable ATS scores.
+4.  **UI/UX Stability in Streamlit**: Navigating Streamlit's "unmounting" behavior was a key learning. By using `session_state` to strategically hide and show widgets, I solved persistent UI glitches like duplicate icons and doubling labels.
+5.  **Secure AI Architectures (BYOK)**: Implementing a **Bring Your Own Key** model highlighted the importance of privacy-first design in AI tools, ensuring that sensitive credentials never leave the user's browser session.
+

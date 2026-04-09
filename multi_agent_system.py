@@ -6,6 +6,7 @@ from langchain_groq import ChatGroq
 from langchain_core.messages import SystemMessage, HumanMessage
 from langgraph.graph import StateGraph, END
 
+# Streamlit Page Configuration
 st.set_page_config(
     page_title="ResumeIQ", 
     page_icon="None", 
@@ -13,10 +14,7 @@ st.set_page_config(
     initial_sidebar_state="collapsed"
 )
 
-# ==========================================
-# Core LangGraph / LangChain Logic
-# ==========================================
-
+# Core LangGraph / LangChain Logic below
 class AgentState(TypedDict):
     resume_text: str
     parsed_data: str
@@ -26,6 +24,7 @@ class AgentState(TypedDict):
     final_resume: str
     groq_api_key: str
 
+# function1
 def parser_agent(state: AgentState):
     llm = ChatGroq(model_name="llama-3.1-8b-instant", temperature=0, groq_api_key=state['groq_api_key'])
     sys_msg = SystemMessage(content="You are an expert Resume Parser. Convert raw resume text into structured text. Extract: Name, Skills, Education, Experience, and Projects.")
@@ -33,6 +32,7 @@ def parser_agent(state: AgentState):
     response = llm.invoke([sys_msg, user_msg])
     return {"parsed_data": response.content}
 
+# function2
 def ats_scoring_agent(state: AgentState):
     llm = ChatGroq(model_name="llama-3.1-8b-instant", temperature=0, groq_api_key=state['groq_api_key'])
     sys_msg = SystemMessage(content="""You are a brutally strict, highly analytical ATS (Applicant Tracking System) Evaluator. 
@@ -75,6 +75,8 @@ Parsed Data:
 
     return {"ats_score": score_part, "missing_keywords": missing_part}
 
+
+# function3
 def improvement_agent(state: AgentState):
     llm = ChatGroq(model_name="llama-3.1-8b-instant", temperature=0, groq_api_key=state['groq_api_key'])
     sys_msg = SystemMessage(content="You are an expert Resume Coach. Provide actionable suggestions using action verbs and quantified impact.")
@@ -88,6 +90,7 @@ Missing Keywords / Weak Areas:
     response = llm.invoke([sys_msg, user_msg])
     return {"suggestions": response.content}
 
+# function4
 def rewrite_agent(state: AgentState):
     llm = ChatGroq(model_name="llama-3.1-8b-instant", temperature=0, groq_api_key=state['groq_api_key'])
     sys_msg = SystemMessage(content="You are an expert Professional Resume Writer. Write highly professional, impactful, and strong resumes.")
@@ -100,6 +103,7 @@ Improvement Suggestions:
 """)
     response = llm.invoke([sys_msg, user_msg])
     return {"final_resume": response.content}
+
 
 @st.cache_resource
 def build_workflow():
@@ -119,12 +123,10 @@ def build_workflow():
 
 app = build_workflow()
 
-# ==========================================
-# Helpers
-# ==========================================
 
+# Helpers
 def extract_text_from_pdf(uploaded_file) -> str:
-    # Reset internal file pointer to the beginning, in case Streamlit already read it.
+    """Reset internal file pointer and extract text from PDF."""
     uploaded_file.seek(0)
     pdf_reader = PyPDF2.PdfReader(io.BytesIO(uploaded_file.read()))
     text = ""
@@ -132,10 +134,8 @@ def extract_text_from_pdf(uploaded_file) -> str:
         text += pdf_reader.pages[page].extract_text()
     return text
 
-# ==========================================
-# Streamlit UI
-# ==========================================
 
+# Streamlit UI
 def main():
     if "analysis_results" not in st.session_state:
         st.session_state["analysis_results"] = None
@@ -188,7 +188,7 @@ def main():
                     st.session_state["uploaded_pdf"] = uploaded_file
                     st.rerun()
             else:
-                st.info(f"📄 Analyzing: **{st.session_state['uploaded_pdf'].name}**")
+                st.info(f"Analyzing: **{st.session_state['uploaded_pdf'].name}**")
                 
                 with st.spinner("Analyzing document..."):
                     raw_text = extract_text_from_pdf(st.session_state["uploaded_pdf"])
